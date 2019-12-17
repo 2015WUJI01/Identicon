@@ -33,7 +33,7 @@ class GdGenerator extends BaseGenerator implements GeneratorInterface
     private function generateImage()
     {
         // prepare image
-        $this->generatedImage = imagecreatetruecolor($this->getPixelRatio() * 5, $this->getPixelRatio() * 5);
+        $this->generatedImage = imagecreatetruecolor($this->getPixelRatio() * 5 + $this->getMargin() * 2, $this->getPixelRatio() * 5 + $this->getMargin() * 2);
 
         $rgbBackgroundColor = $this->getBackgroundColor();
         if (null === $rgbBackgroundColor) {
@@ -51,8 +51,15 @@ class GdGenerator extends BaseGenerator implements GeneratorInterface
         // draw content
         foreach ($this->getArrayOfSquare() as $lineKey => $lineValue) {
             foreach ($lineValue as $colKey => $colValue) {
-                if (true === $colValue) {
-                    imagefilledrectangle($this->generatedImage, $colKey * $this->getPixelRatio(), $lineKey * $this->getPixelRatio(), ($colKey + 1) * $this->getPixelRatio(), ($lineKey + 1) * $this->getPixelRatio(), $gdColor);
+                if (true === $colValue && 5 > $lineKey) {
+                    imagefilledrectangle(
+                        $this->generatedImage,
+                        $this->getMargin() + $colKey * $this->getPixelRatio(),
+                        $this->getMargin() + $lineKey * $this->getPixelRatio(),
+                        $this->getMargin() + ($colKey + 1) * $this->getPixelRatio() -1,
+                        $this->getMargin() + ($lineKey + 1) * $this->getPixelRatio() -1,
+                        $gdColor
+                    );
                 }
             }
         }
@@ -63,10 +70,10 @@ class GdGenerator extends BaseGenerator implements GeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function getImageBinaryData($string, $size = null, $color = null, $backgroundColor = null)
+    public function getImageBinaryData($string, $size = null, $color = null, $backgroundColor = null, $margin = null)
     {
         ob_start();
-        imagepng($this->getImageResource($string, $size, $color, $backgroundColor));
+        imagepng($this->getImageResource($string, $size, $color, $backgroundColor, $margin));
         $imageData = ob_get_contents();
         ob_end_clean();
 
@@ -76,13 +83,14 @@ class GdGenerator extends BaseGenerator implements GeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function getImageResource($string, $size = null, $color = null, $backgroundColor = null)
+    public function getImageResource($string, $size = null, $color = null, $backgroundColor = null, $margin = null)
     {
         $this
             ->setString($string)
             ->setSize($size)
             ->setColor($color)
             ->setBackgroundColor($backgroundColor)
+            ->setMargin($margin)
             ->generateImage();
 
         return $this->generatedImage;

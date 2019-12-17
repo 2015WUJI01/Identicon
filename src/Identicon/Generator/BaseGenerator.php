@@ -32,6 +32,11 @@ class BaseGenerator
     /**
      * @var int
      */
+    protected $maigin;
+
+    /**
+     * @var int
+     */
     protected $pixelRatio;
 
     /**
@@ -246,5 +251,33 @@ class BaseGenerator
     public function getPixelRatio()
     {
         return $this->pixelRatio;
+    }
+
+    /**
+     * Set the image margin.
+     *
+     * @param int $margin
+     *
+     * @return $this
+     */
+    public function setMargin($margin)
+    {
+        if (null === $margin) {
+            return $this;
+        }
+
+        $this->margin = $margin;
+
+        return $this;
+    }
+
+    /**
+     * Get the image margin.
+     *
+     * @return int
+     */
+    public function getMargin()
+    {
+        return $this->margin;
     }
 }

@@ -54,7 +54,7 @@ or generate and get the base 64 image uri ready for integrate into an HTML img t
 ``` php
 $imageDataUri = $identicon->getImageDataUri('bar');
 ```
-``` html
+``` php
 <img src="<?php echo $imageDataUri; ?>" alt="bar Identicon" />
 ```
 
@@ -75,6 +75,8 @@ Color can be an hexadecimal with 6 characters
 
 ``` php
 $identicon->displayImage('bar', 64, 'A87EDF');
+
+$identicon->displayImage('bar', 64, '#A87EDF');
 ```
 
 or an array with red, green, blue value
@@ -88,12 +90,30 @@ That's it!
 ### Generate an identicon on SVG format
 
 The only thing you need to change it this one:
+
 ``` php
 $identicon = new \Identicon\Identicon(new SvgGenerator());
 $imageDataUri = $identicon->getImageDataUri('bar');
+```
+``` php
 <img src="<?= $imageDataUri; ?>" alt="bar Identicon" />
 ```
 
+### Margin
+
+There is no magin by default. If you need an image with margin, you can add a fifth parameter. One-tenth of the size is recommended. 
+
+In this example, we set a gray background, and you can clearly see the margins:
+
+![Identicon example #6](doc/benjaminAtYzalisDotCom_with_margin.png)&nbsp;&nbsp;
+![Identicon example #7](doc/Benjamin_with_margin.png)&nbsp;&nbsp;
+![Identicon example #8](doc/8.8.8.8_with_margin.png)&nbsp;&nbsp;
+![Identicon example #9](doc/8.8.4.4_with_margin.png)&nbsp;&nbsp;
+![Identicon example #10](doc/yzalis_with_margin.png)
+
+```php
+$identicon->displayImage('foo', 100, null, '#f0f0f0', 10);
+```
 
 ## Unit Tests
 

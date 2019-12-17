@@ -50,11 +50,12 @@ class Identicon
      * @param int          $size
      * @param string|array $color
      * @param string       $backgroundColor
+     * @param int          $margin
      */
-    public function displayImage($string, $size = 64, $color = null, $backgroundColor = null)
+    public function displayImage($string, $size = 64, $color = null, $backgroundColor = null, $margin = 0)
     {
         header('Content-Type: '.$this->generator->getMimeType());
-        echo $this->getImageData($string, $size, $color, $backgroundColor);
+        echo $this->getImageData($string, $size, $color, $backgroundColor, $margin);
     }
 
     /**
@@ -64,12 +65,13 @@ class Identicon
      * @param int          $size
      * @param string|array $color
      * @param string       $backgroundColor
+     * @param int          $margin
      *
      * @return string
      */
-    public function getImageData($string, $size = 64, $color = null, $backgroundColor = null)
+    public function getImageData($string, $size = 64, $color = null, $backgroundColor = null, $margin = 0)
     {
-        return $this->generator->getImageBinaryData($string, $size, $color, $backgroundColor);
+        return $this->generator->getImageBinaryData($string, $size, $color, $backgroundColor, $margin);
     }
 
     /**
@@ -79,12 +81,13 @@ class Identicon
      * @param int          $size
      * @param string|array $color
      * @param string       $backgroundColor
+     * @param int          $margin
      *
      * @return string
      */
-    public function getImageResource($string, $size = 64, $color = null, $backgroundColor = null)
+    public function getImageResource($string, $size = 64, $color = null, $backgroundColor = null, $margin = 0)
     {
-        return $this->generator->getImageResource($string, $size, $color, $backgroundColor);
+        return $this->generator->getImageResource($string, $size, $color, $backgroundColor, $margin);
     }
 
     /**
@@ -94,12 +97,13 @@ class Identicon
      * @param int          $size
      * @param string|array $color
      * @param string       $backgroundColor
+     * @param int          $margin
      *
      * @return string
      */
-    public function getImageDataUri($string, $size = 64, $color = null, $backgroundColor = null)
+    public function getImageDataUri($string, $size = 64, $color = null, $backgroundColor = null, $margin = 0)
     {
-        return sprintf('data:%s;base64,%s', $this->generator->getMimeType(), base64_encode($this->getImageData($string, $size, $color, $backgroundColor)));
+        return sprintf('data:%s;base64,%s', $this->generator->getMimeType(), base64_encode($this->getImageData($string, $size, $color, $backgroundColor, $margin)));
     }
 
 	/**

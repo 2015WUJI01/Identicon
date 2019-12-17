@@ -18,21 +18,22 @@ class SvgGenerator extends BaseGenerator implements GeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function getImageBinaryData($string, $size = null, $color = null, $backgroundColor = null)
+    public function getImageBinaryData($string, $size = null, $color = null, $backgroundColor = null, $margin = null)
     {
-        return $this->getImageResource($string, $size, $color, $backgroundColor);
+        return $this->getImageResource($string, $size, $color, $backgroundColor, $margin);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getImageResource($string, $size = null, $color = null, $backgroundColor = null)
+    public function getImageResource($string, $size = null, $color = null, $backgroundColor = null, $margin = null)
     {
         $this
             ->setString($string)
             ->setSize($size)
             ->setColor($color)
             ->setBackgroundColor($backgroundColor)
+            ->setMargin($margin)
             ->_generateImage();
 
         return $this->generatedImage;
@@ -44,9 +45,9 @@ class SvgGenerator extends BaseGenerator implements GeneratorInterface
     protected function _generateImage()
     {
         // prepare image
-        $w = $this->getPixelRatio() * 5;
-        $h = $this->getPixelRatio() * 5;
-        $svg = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="'.$w.'" height="'.$h.'" viewBox="0 0 5 5">';
+        $w = $this->getPixelRatio() * 5 + $this->getMargin() * 2;
+        $h = $this->getPixelRatio() * 5 + $this->getMargin() * 2;
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="'.$w.'" height="'.$h.'" viewBox="0 0 '.$w.' '.$h.'">';
 
         $backgroundColor = '#FFF';
         $rgbBackgroundColor = $this->getBackgroundColor();
@@ -54,14 +55,14 @@ class SvgGenerator extends BaseGenerator implements GeneratorInterface
             $backgroundColor = $this->_toUnderstandableColor($rgbBackgroundColor);
         }
 
-        $svg .= '<rect width="5" height="5" fill="'.$backgroundColor.'" stroke-width="0"/>';
+        $svg .= '<rect width="'.$w.'" height="'.$h.'" fill="'.$backgroundColor.'" stroke-width="0"/>';
 
         $rects = [];
         // draw content
         foreach ($this->getArrayOfSquare() as $lineKey => $lineValue) {
             foreach ($lineValue as $colKey => $colValue) {
-                if (true === $colValue) {
-                    $rects[] = 'M'.$colKey.','.$lineKey.'h1v1h-1v-1';
+                if (true === $colValue && 5 > $lineKey) {
+                    $rects[] = 'M'.($colKey*$this->getPixelRatio()+$this->getMargin()).','.($lineKey*$this->getPixelRatio()+$this->getMargin()).'h'.$this->getPixelRatio().'v'.$this->getPixelRatio().'h-'.$this->getPixelRatio().'v-'.$this->getPixelRatio();
                 }
             }
         }
